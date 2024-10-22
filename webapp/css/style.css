@@ -1,0 +1,7 @@
+/* Enter your custom styles here */
+.tileLayout {
+	float: left;
+}
+.nodeText{
+	color: black !important;
+}

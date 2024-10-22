@@ -1,0 +1,26 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<QuickView id="quickView">
+		<QuickViewPage
+				header="{i18n>lblDetail}"
+				icon="/sap/opu/odata/sap/ZNP_GW_CENTRAL_FUNC_SRV/PhotoSet(Pernr='{Pernr}')/$value"
+				title="{Descricao}"
+				description="{Cargo}"
+                >
+            <QuickViewGroup>
+				<QuickViewGroupElement
+						label="{i18n>lblPernr}"
+						value="{Pernr}" />
+			</QuickViewGroup>
+			<QuickViewGroup heading="{i18n>lblContact}">
+				<QuickViewGroupElement
+						label="{i18n>lblTelefone}"
+						value="{Telefone}"
+						type="mobile"/>
+				<QuickViewGroupElement
+						label="{i18n>lblEmail}"
+						value="{Email}"
+						type="email"/>
+			</QuickViewGroup>
+		</QuickViewPage>
+	</QuickView>
+</core:FragmentDefinition>

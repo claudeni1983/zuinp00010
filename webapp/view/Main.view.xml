@@ -1,0 +1,273 @@
+<mvc:View controllerName="zuinp00010.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns:uxap="sap.uxap"
+    xmlns="sap.m"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    xmlns:ng="sap.suite.ui.commons.networkgraph"
+    xmlns:ngl="sap.suite.ui.commons.networkgraph.layout"
+    xmlns:f="sap.f"
+    xmlns:layout="sap.ui.layout">
+    <uxap:ObjectPageLayout id="_IDGenObjectPageLayout1" busy="{mainView>/busy}" useIconTabBar="true" showTitleInHeaderContent="false" showHeaderContent="true" showAnchorBar="true" alwaysShowContentHeader="false" showFooter="true" subSectionLayout="TitleOnLeft">
+        <uxap:headerContent>
+                <VBox alignItems="Start" direction="Column" fitContainer="false" width="auto" height="auto" justifyContent="Start" renderType="Div" visible="true" displayInline="false">
+                    <items>
+                        <Title text="{Cname}" titleStyle="H2" width="auto" textAlign="Begin" visible="true" wrapping="true"/>
+                        <FlexBox wrap="Wrap">
+                            <f:Avatar src="/sap/opu/odata/sap/ZNP_GW_CENTRAL_FUNC_SRV/PhotoSet(Pernr='{Pernr}')/$value" displaySize="XL"
+                                      showBorder="true" class="sapUiSmallMarginEnd sapUiTinyMarginTop" />
+                            <VBox direction="Column" fitContainer="true" width="auto" height="auto" class="sapUiSmallMarginEnd">
+                                <items>
+                                    <ObjectAttribute title="{i18n>lblPernr}" text="{Pernr}"  active="false" />
+                                    <ObjectAttribute title="{i18n>lblDtNascimento}" text="{DtNascimentoStr}"  active="false" visible="true"/>
+                                    <ObjectAttribute title="{i18n>lblCidade}" text="{Zzcidade}" active="false" />
+                                    <ObjectAttribute title="{i18n>lblCargo}" text="{Cargo}" active="false" />
+                                    <ObjectAttribute title="{i18n>lblTempoEmpresa}" text="{ parts:[ 'i18n>lblAnos', 'AnosEmpresa', 'MesesEmpresa' ],
+                                                                                            formatter: 'jQuery.sap.formatMessage'}" active="false" />
+                                </items>
+                            </VBox>
+                            <VBox direction="Column" fitContainer="true" width="auto" height="auto" class="sapUiSmallMarginEnd">
+                                <items>
+                                    <ObjectAttribute title="{i18n>lblUO}" text="{Orgtx}" active="false" />
+                                    <ObjectAttribute title="{i18n>lblGestor}" text="{GestorDireto}" active="false" />
+                                    <ObjectAttribute title="{i18n>lblDiretoria}" text="{Diretoria}" active="false" />
+                                    <ObjectAttribute title="{i18n>lblVP}" text="{Vp}" active="false" />
+                                </items>
+                            </VBox>
+                        </FlexBox>
+                    </items>
+                    <layoutData/>
+                </VBox>
+        </uxap:headerContent>
+
+        <uxap:sections>
+            <uxap:ObjectPageSection title="{i18n>ttlAcessoRapido}" titleUppercase="true" visible="true">
+                <uxap:subSections>
+                    <uxap:ObjectPageSubSection title="" class="sapUiTinyMargin sapUiNoMarginTop">
+                        <uxap:blocks>
+                            <form:SimpleForm id="formFrequency"
+                                editable="false"
+                                layout="ResponsiveGridLayout"
+                                labelSpanXL="1"
+                                labelSpanL="1"
+                                labelSpanM="1"
+                                labelSpanS="12"
+                                adjustLabelSpan="false"
+                                emptySpanXL="0"
+                                emptySpanL="0"
+                                emptySpanM="0"
+                                emptySpanS="0"
+                                columnsXL="3"
+                                columnsL="3"
+                                columnsM="3"
+                                singleContainerFullSize="false" >
+                                <form:content>
+                                    <core:Title id="registerTitle" text="{i18n>ttlRegistro}" />
+                                    <FlexBox id="registerBlock" direction="Column">
+                                    <DateTimePicker dateValue="{mainView>/dateTime}" width="100%" displayFormat="{= ${EmployeeGroup} === ${mainView>/traineeGroup} ? 'dd.MM.yyyy' : 'short' }"
+                                                    valueStateText="Invalid entry" enabled="false" valueFormat="yyyyMMddHHmmss"/>
+                                    <ComboBox items="{time>/OperationSet}" selectedKey="{mainView>/Operation}" enabled="{mainView>/ElegibleForRegistration}" width="100%"
+                                              placeholder="{i18n>lblOperation}" visible="{= ${mainView>/EmployeeGroup} !== ${mainView>/traineeGroup}}">
+                                        <core:Item key="{time>OperationId}" text="{time>Description}" />
+                                    </ComboBox>
+                                    <CheckBox text="{i18n>previousDay}" selected="{mainView>/PreviousDay}" visible="{= ${mainView>/Operation} === 'P20' }" enabled="{mainView>/ElegibleForRegistration}" />
+                                    <Button text="{= ${mainView>/EmployeeGroup} === ${mainView>/traineeGroup} ? ${i18n>btnRegisterTrainee} : ${i18n>btnRegister} }" icon="sap-icon://time-account" enabled="{= ${mainView>/ElegibleForRegistration} &amp;&amp; ${mainView>/EnableRegistrationButton} }" iconDensityAware="false" press="onRegister" width="100%" />
+                                    <MessageStrip text="{i18n>notEligible}" showIcon="true" visible="{= !${mainView>/ElegibleForRegistration} }" />
+                                    <Table id="tabAppoint" backgroundDesign="Transparent" items="{time>/AppointmentSet}" noDataText=" ">
+                                        <columns>
+                                            <Column visible="{= ${mainView>/EmployeeGroup} === ${mainView>/traineeGroup}}">
+                                                <header/>
+                                            </Column>
+                                            <Column visible="{= ${mainView>/EmployeeGroup} !== ${mainView>/traineeGroup}}">
+                                                <header/>
+                                            </Column>
+                                            <Column demandPopin="true" minScreenWidth="Tablet" hAlign="End">
+                                                <header/>
+                                            </Column>
+                                        </columns>
+                                        <items>
+                                            <ColumnListItem>
+                                               <cells>
+                                                    <Text text="{path: 'time>Date',
+                                                                                    type: 'sap.ui.model.odata.type.DateTime',
+                                                                                    formatOptions: {
+                                                                                        format : 'yyyyMMdd',
+                                                                                        UTC : 'true'
+                                                                                    }}" />
+                                                    <Text text="{path: 'time>Time',
+                                                                                    type: 'sap.ui.model.odata.type.Time',
+                                                                                    formatOptions: {
+                                                                                        pattern : 'HH:mm:ss'
+                                                                                    }}" />
+                                                   <Text text="{time>AppointmentTypeText}" />
+                                               </cells>
+                                            </ColumnListItem>
+                                        </items>
+                                    </Table>
+                                    </FlexBox>
+                                    <core:Title text="{i18n>lblMessage}" id="titMessage" />
+                                    <Table id="tabMessage" items="{/MessageSet}" noDataText=" ">
+                                        <columns>
+                                            <Column>
+                                                <header/>
+                                            </Column>
+                                        </columns>
+                                        <items>
+                                            <ColumnListItem>
+                                               <cells>
+                                                <FormattedText htmlText="{Msg}" />
+                                               </cells>
+                                            </ColumnListItem>
+                                        </items>
+                                    </Table>
+
+                                    <core:Title id="titBoxFiqueLigado" text=" " />
+                                    <VBox id="vBoxFiqueLigado" visible="false">
+                                        <Carousel id="carouselFiqueLigado" loop="true" pages="{ path: '/ImportantDatesSet',
+                                                                                                events: {
+                                                                                                    dataReceived: '._setVisibilityCarousel'
+                                                                                                } }">
+                                            <pages>
+                                                <VBox>
+                                                    <Image src="{path: 'Photo', formatter: '.formatPhoto'}"  width="100%" />
+                                                    <FormattedText htmlText="{Title}" class="sapUiSmallMarginBottom"/>
+                                                    <Text text="{Descr}" class="sapUiSmallMarginBottom" />
+                                                </VBox>
+                                            </pages>
+                                        </Carousel>
+                                    </VBox>
+                                </form:content>
+                            </form:SimpleForm>
+                        </uxap:blocks>
+                        <uxap:moreBlocks/>
+                        <uxap:actions/>
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
+            </uxap:ObjectPageSection>
+
+            <uxap:ObjectPageSection title="{i18n>lblEquipe}" titleUppercase="true" visible="true">
+                <uxap:subSections>
+                    <uxap:ObjectPageSubSection title="" class="sapUiTinyMargin sapUiNoMargin">
+                        <uxap:blocks>
+                            <VBox>
+                                <OverflowToolbar>
+                                    <ToolbarSpacer />
+                                    <SegmentedButton selectedKey="tab" selectionChange="onChangeTeamView">
+                                        <items>
+                                            <SegmentedButtonItem key="tab" icon="sap-icon://table-view" tooltip="{i18n>btnShowTable}" />
+                                            <SegmentedButtonItem key="org" icon="sap-icon://org-chart" tooltip="{i18n>btnShowOrgChart}" />
+                                        </items>
+                                    </SegmentedButton>
+                                </OverflowToolbar>
+                                <Table id="tableStruct" fixedLayout="false" items="{/StrucSet}" visible="{= ${mainView>/TeamView} === 'tab' }">
+                                            <columns>
+                                                <Column>
+                                                    <header>
+                                                        <Text text="{i18n>lblNome}" />
+                                                    </header>
+                                                </Column>
+                                                <Column demandPopin="true" minScreenWidth="Tablet">
+                                                    <header>
+                                                        <Text text="{i18n>lblCargo}" />
+                                                    </header>
+                                                </Column>
+                                                <Column demandPopin="true" minScreenWidth="Tablet">
+                                                    <header>
+                                                        <Text text="{i18n>lblEmail}" />
+                                                    </header>
+                                                </Column>
+                                                <Column demandPopin="true" minScreenWidth="Tablet">
+                                                    <header>
+                                                        <Text text="{i18n>lblTelefone}" />
+                                                    </header>
+                                                </Column>
+                                            </columns>
+                                            <items>
+                                                <ColumnListItem>
+                                                <cells>
+                                                        <HBox>
+                                                            <core:Icon src="{Icon}" width="40px" class="sapUiTinyMarginEnd" />
+                                                            <Text text="{Descricao}" />
+                                                        </HBox>
+                                                        <Text text="{Cargo}" />
+                                                        <Link text="{Email}" href="mailto:{Email}" wrapping="false" />
+                                                        <Text text="{Telefone}" />
+                                                </cells>
+                                                </ColumnListItem>
+                                            </items>
+                                        </Table>
+
+                                        <ng:Graph id="graph" enableWheelZoom="false" orientation="TopBottom" visible="{= ${mainView>/TeamView} === 'org' }"
+                                                nodes="{/StrucSet}" searchSuggest="suggestOrg" search="searchOrg"
+                                                lines="{ path: '/StrucSet', filters: [{ path: 'NodeID',
+                                                                                        operator: 'NE',
+                                                                                        value1: '0'
+                                                                                     } ] }" >
+                                                <ng:layoutAlgorithm>
+                                                    <ngl:LayeredLayout mergeEdges="true" nodePlacement="LinearSegments" nodeSpacing="25" />
+                                                </ng:layoutAlgorithm>
+                                                <ng:nodes>
+                                                    <ng:Node key="{NodeID}"
+                                                        description="{Descricao}"
+                                                        shape="Box"
+                                                        showActionLinksButton="false"
+                                                        showDetailButton="false"
+                                                        maxWidth="94px"
+                                                        status="{= ${NodeID} === 0 ? 'Head' : 'Employee' }">
+                                                        <ng:content>
+                                                            <Text text="{Descricao}" class="sapUiTinyMargin nodeText" />
+                                                        </ng:content>
+                                                        <ng:actionButtons>
+                                                            <ng:ActionButton icon="sap-icon://person-placeholder" press="showEmployeeDetail" />
+                                                        </ng:actionButtons>
+                                                        <ng:attributes>
+                                                            <ng:ElementAttribute label="{i18n>lblPernr}" value="{Pernr}" />
+                                                            <ng:ElementAttribute label="{i18n>lblCargo}" value="{Cargo}" />
+                                                            <ng:ElementAttribute label="{i18n>lblEmail}" value="{Email}" />
+                                                            <ng:ElementAttribute label="{i18n>lblTelefone}" value="{Telefone}" />
+                                                        </ng:attributes>
+                                                        <ng:image>
+                                                            <ng:NodeImage src="/sap/opu/odata/sap/ZNP_GW_CENTRAL_FUNC_SRV/PhotoSet(Pernr='{Pernr}')/$value"
+                                                                    width="80" height="80" tooltip="{Descricao}" />
+                                                        </ng:image>
+                                                    </ng:Node>
+                                                </ng:nodes>
+                                                <ng:lines>
+                                                    <ng:Line from="{ParentNodeID}" to="{NodeID}" arrowOrientation="None" press="orgLinePress" />
+                                                </ng:lines>
+                                                <ng:statuses>
+                                                    <ng:Status key="Head" title="{i18n>lblStatusHead}" backgroundColor="#C6C6C6"
+					                                        borderColor="sapUiContentShadowColor" hoverBorderColor="sapUiContentShadowColor" />
+                                                    <ng:Status key="Employee" title="{i18n>lblStatusEmployee}" backgroundColor="white"
+					                                        borderColor="sapUiContentShadowColor" hoverBorderColor="sapUiContentShadowColor" />
+                                                </ng:statuses>
+                                            </ng:Graph>
+                                    </VBox>
+                        </uxap:blocks>
+                        <uxap:moreBlocks/>
+                        <uxap:actions/>
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
+            </uxap:ObjectPageSection>
+        </uxap:sections>
+
+        <uxap:footer>
+			<OverflowToolbar id="toolbar" design="Info">
+				<Button id="btnMessages"
+                        icon="sap-icon://alert"
+						text="{=${message>/}.length}"
+						visible="{=${message>/}.length > 0}"
+						type="Emphasized"
+						press="onMessagePopoverPress">
+                </Button>
+                <ToolbarSpacer />
+                <Text id="accessText" text="{i18n>lblAccess} {path: 'LogonDateTime',
+                                                                        type: 'sap.ui.model.odata.type.DateTime',
+                                                                        formatOptions: {
+                                                                            style : 'short'
+                                                                        }}" />
+			</OverflowToolbar>
+		</uxap:footer>
+
+    </uxap:ObjectPageLayout>
+</mvc:View>

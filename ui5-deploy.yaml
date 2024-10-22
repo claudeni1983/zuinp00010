@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
+
+specVersion: "2.6"
+metadata:
+  name: zuinp00010
+type: application
+builder:
+  resources:
+    excludes:
+      - /test/**
+      - /localService/**
+  customTasks:
+    - name: deploy-to-abap
+      afterTask: generateCachebusterInfo
+      configuration:
+        target:
+          url: http://brtlvltb309sl.redecorp.br:8000
+        app:
+          name: ZUINP00010
+          description: Central do Funcionário
+          package: ZNP
+          transport: FVDK902230
+        exclude:
+          - /test/
